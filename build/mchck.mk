@@ -36,7 +36,7 @@ GENERATE.d=	$(CC) -MM ${CPPFLAGS} -MT $@ -MT ${@:.d=.o} -MP -MF $@ $<
 
 # Common config
 
-INCLUDEDIRS+=	include . board/${BOARD} soc/${SOC}
+INCLUDEDIRS+=	include . $(call srcpath,${BOARD},src/board) $(foreach _soc,${SOC},$(call srcpath,${_soc},src/soc))
 CPPFLAGS+=	-std=gnu11
 CFLAGS+=	-fplan9-extensions
 CFLAGS+=	-ggdb3 -ffunction-sections -fdata-sections
@@ -108,8 +108,20 @@ export COMPILER_PATH
 
 BOARD?=	mchck
 
-include ${_libdir}/src/board/${BOARD}/board.mk
-include ${_libdir}/src/soc/${SOC}/soc.mk
+define includesoc1
+ifeq ($$(filter ${1},$${_socdone}),)
+_socdone:= $${_socdone} ${1}
+include $$(call srcpath,${1}/build.mk,src/soc)
+$$(call includesoc)
+endif
+endef
+
+define includesoc
+$(foreach _soc,${SOC},$(eval $(call includesoc1,${_soc})))
+endef
+
+include $(call srcpath,${BOARD}/build.mk,src/board)
+$(call includesoc)
 
 COPTFLAGS?=	-Os
 CWARNFLAGS?=	-Wall -Wno-main -Wshadow
@@ -128,6 +140,7 @@ CPPFLAGS.ld+=	-DLOADER_ADDR='${LOADER_ADDR}'
 CPPFLAGS.ld+=	-DLOADER_SIZE='${LOADER_SIZE}'
 CPPFLAGS.ld+=	-DAPP_ADDR='${APP_ADDR}'
 CPPFLAGS.ld+=	-DAPP_SIZE='${APP_SIZE}'
+CPPFLAGS.ld+=	-DRAM_SIZE='${RAM_SIZE}'
 
 ifdef LOADER
 CPPFLAGS.ld+=	-DMEMCFG_LDSCRIPT='"loader.ld"'

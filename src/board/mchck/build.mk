@@ -1,4 +1,4 @@
-SOC=	kinetis-mk20
+SOC+=	kinetis/MK20D5
 TARGET=	MK20DX32VLF5
 
 DFUVID?=	2323
