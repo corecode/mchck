@@ -62,11 +62,8 @@ Default_Reset_Handler(void)
         SIM.sopt2.pllfllsel = SIM_PLLFLLSEL_PLL;
 #else
         /* FLL at 48MHz */
-        MCG.c4.raw = ((struct MCG_C4_t){
-                        .drst_drs = MCG_DRST_DRS_MID,
-                        .dmx32 = 1
-                }).raw;
-        SIM.sopt2.pllfllsel = SIM_PLLFLLSEL_FLL;
+        MCG_C4 = MCG_C4_DRST_DRS(1) | MCG_C4_DMX32_MASK;
+        SIM_SOPT2 |= SIM_SOPT2_PLLFLLSEL_MASK;
 #endif
 
         memcpy(&_sdata, &_sidata, (uintptr_t)&_edata - (uintptr_t)&_sdata);

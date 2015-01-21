@@ -1,28 +1,8 @@
 #include <soc/cortex-m/soc.h>
 
-#include <soc/kinetis/periph/ftfl.h>
-#include <soc/kinetis/periph/usbotg.h>
-#include <soc/kinetis/periph/sim.h>
-#include <soc/kinetis/periph/mcg.h>
-#include <soc/kinetis/periph/rcm.h>
-#include <soc/kinetis/periph/port.h>
-#include <soc/kinetis/periph/gpio.h>
-#include <soc/kinetis/periph/pmc.h>
-#include <soc/kinetis/periph/adc.h>
-#include <soc/kinetis/periph/spi.h>
+#include <soc/kinetis/bitfield.h>
+
 #include <soc/kinetis/periph/lptmr.h>
-#include <soc/kinetis/periph/ftm.h>
-#include <soc/kinetis/periph/i2c.h>
-#include <soc/kinetis/periph/pit.h>
-#include <soc/kinetis/periph/tsi.h>
-#include <soc/kinetis/periph/uart.h>
-#include <soc/kinetis/periph/rtc.h>
-#include <soc/kinetis/periph/crc.h>
-#include <soc/kinetis/periph/llwu.h>
-#include <soc/kinetis/periph/smc.h>
-#include <soc/kinetis/periph/vbat.h>
-#include <soc/kinetis/periph/vref.h>
-#include <soc/kinetis/periph/cmp.h>
 
 #include <soc/kinetis/adc.h>
 #include <soc/kinetis/crc.h>
