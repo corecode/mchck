@@ -155,7 +155,7 @@ usb_reset(void)
         /* reset pingpong state */
         /* For some obscure reason, we need to use or here. */
         USB0_CTL |=
-                USB_CTL_TXSUSPENDTOKENBUSY_MASK |
+                USB_CTL_TXSUSPENDTOKENBUSY_MASK | /* XXX did not get set in bitfield compiler output */
                 USB_CTL_ODDRST_MASK;
 
         /* clear all interrupt bits - not sure if needed */
