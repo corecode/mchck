@@ -63,7 +63,7 @@ Default_Reset_Handler(void)
 #else
         /* FLL at 48MHz */
         MCG_C4 = MCG_C4_DRST_DRS(1) | MCG_C4_DMX32_MASK;
-        SIM_SOPT2 |= SIM_SOPT2_PLLFLLSEL_MASK;
+        bf_set(SIM_SOPT2, SIM_SOPT2_PLLFLLSEL, SIM_PLLFLLSEL_FLL);
 #endif
 
         memcpy(&_sdata, &_sidata, (uintptr_t)&_edata - (uintptr_t)&_sdata);

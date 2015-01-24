@@ -5,6 +5,7 @@
 #include <soc/kinetis/periph/lptmr.h>
 #include <soc/kinetis/periph/ftfl.h>
 #include <soc/kinetis/periph/usbotg.h>
+#include <soc/kinetis/periph/sim.h>
 
 #include <soc/kinetis/adc.h>
 #include <soc/kinetis/crc.h>
