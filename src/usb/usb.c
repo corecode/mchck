@@ -31,6 +31,9 @@ usb_tx_next(struct usbd_ep_pipe_state_t *s)
 
 		if (thislen > s->ep_maxsize)
 			thislen = s->ep_maxsize;
+		/* XXX to remove division in setup_tx */
+		/* else if (thislen == s->ep_maxsize) */
+		/* 	s->short_transfer = 1; */
 
 		void *addr = s->data_buf + s->pos;
 
@@ -456,6 +459,7 @@ usb_handle_control(void *data, ssize_t len, void *cbdata)
 	 * Pass control to our handlers for non standard
 	 * or non device (interface/class/other) requests.
 	 */
+	/* XXX this eats ~200 bytes flash on CM0+ */
 	if (req->type != USB_CTRL_REQ_STD || req->recp != USB_CTRL_REQ_DEV) {
 		if (usb_handle_control_nonstddev(req) != 0)
 			return;
