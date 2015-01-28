@@ -1,3 +1,9 @@
+#include <MK20D5.h>
+
+#define FLASH_SECTOR_SIZE 1024
+#define FLASH_SECTION_SIZE 1024
+#define FLASH_ELEM_SIZE 4
+
 #include <soc/cortex-m/soc.h>
 
 #include <soc/kinetis/bitfield.h>
@@ -12,7 +18,6 @@
 #include <soc/kinetis/flash.h>
 #include <soc/kinetis/ftm.h>
 #include <soc/kinetis/i2c.h>
-#include <soc/kinetis/onboard-led.h>
 #include <soc/kinetis/pin.h>
 #include <soc/kinetis/pin_change.h>
 #include <soc/kinetis/gpio.h>
@@ -22,3 +27,4 @@
 #include <soc/kinetis/stdio.h>
 #include <soc/kinetis/timeout.h>
 #include <soc/kinetis/uart.h>
+#include <soc/kinetis/wdog.h>

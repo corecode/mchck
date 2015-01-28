@@ -18,10 +18,7 @@ void main(void);
 void
 Default_Reset_Handler(void)
 {
-	/* Disable Watchdog */
-	WDOG_UNLOCK = 0xc520;
-	WDOG_UNLOCK = 0xd928;
-	WDOG_STCTRLH &= ~WDOG_STCTRLH_WDOGEN_MASK;
+        watchdog_disable();
 
 #ifdef EXTERNAL_XTAL
         OSC_CR = OSC_CR_SC16P_MASK;

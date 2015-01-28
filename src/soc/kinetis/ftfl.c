@@ -4,7 +4,7 @@ uint32_t flash_ALLOW_BRICKABLE_ADDRESSES;
 
 /* This will have to live in SRAM. */
 __attribute__((section(".ramtext.ftfl_submit_cmd"), long_call))
-int
+static int
 ftfl_submit_cmd(void)
 {
         FTFL_FSTAT =
@@ -32,7 +32,7 @@ flash_prepare_flashing(void)
         return (0);
 }
 
-int
+static int
 flash_erase_sector(uintptr_t addr)
 {
         if (addr < (uintptr_t)&_app_rom &&
@@ -45,7 +45,7 @@ flash_erase_sector(uintptr_t addr)
         return (ftfl_submit_cmd());
 }
 
-int
+static int
 flash_program_section(uintptr_t addr, size_t len)
 {
         FTFL_FCCOB0 = FTFL_FCMD_PROGRAM_SECTION;
@@ -55,4 +55,35 @@ flash_program_section(uintptr_t addr, size_t len)
         FTFL_FCCOB4 = (len / FLASH_ELEM_SIZE) >> 8;
         FTFL_FCCOB5 = (len / FLASH_ELEM_SIZE);
         return (ftfl_submit_cmd());
+}
+
+static void *
+flash_get_staging_area(uintptr_t addr, size_t len)
+{
+        if ((addr & (FLASH_SECTION_SIZE - 1)) != 0 ||
+            len != FLASH_SECTION_SIZE)
+                return (NULL);
+        return (FlexRAM);
+}
+
+
+int
+flash_program_sector(const uint8_t *buf, uintptr_t addr, size_t len)
+{
+        int ret = 0;
+
+        ret = ret || (len != FLASH_SECTOR_SIZE);
+        ret = ret || ((addr & (FLASH_SECTOR_SIZE - 1)) != 0);
+        ret = ret || flash_erase_sector(addr);
+
+        for (int i = FLASH_SECTOR_SIZE / FLASH_SECTION_SIZE; i > 0; --i) {
+                memcpy(flash_get_staging_area(addr, FLASH_SECTION_SIZE),
+                       buf,
+                       FLASH_SECTION_SIZE);
+                ret = ret || flash_program_section(addr, FLASH_SECTION_SIZE);
+                buf += FLASH_SECTION_SIZE;
+                addr += FLASH_SECTION_SIZE;
+        }
+
+        return (ret);
 }
