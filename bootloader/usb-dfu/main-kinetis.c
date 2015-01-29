@@ -97,11 +97,11 @@ Reset_Handler(void)
          * proof method, but it should help for the first flash.
          */
         if (bf_get(RCM_SRS0, RCM_SRS0_PIN) ||
-            _app_rom == 0xffffffff /*||
-                                     memcmp(&VBAT, sys_reset_to_loader_magic, sizeof(sys_reset_to_loader_magic)) == 0 */) {
+            _app_rom == 0xffffffff ||
+            memcmp(sys_register_file, sys_reset_to_loader_magic, sizeof(sys_reset_to_loader_magic)) == 0) {
                 extern void Default_Reset_Handler(void);
 
-/*                memset(&VBAT, 0, sizeof(VBAT));*/
+                memset(sys_register_file, 0, sys_register_file);
                 Default_Reset_Handler();
         } else {
                 uint32_t addr = (uintptr_t)&_app_rom;
