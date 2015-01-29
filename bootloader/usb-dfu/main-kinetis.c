@@ -101,7 +101,7 @@ Reset_Handler(void)
             memcmp(sys_register_file, sys_reset_to_loader_magic, sizeof(sys_reset_to_loader_magic)) == 0) {
                 extern void Default_Reset_Handler(void);
 
-                memset(sys_register_file, 0, sys_register_file);
+                memset(sys_register_file, 0, sizeof(sys_register_file));
                 Default_Reset_Handler();
         } else {
                 uint32_t addr = (uintptr_t)&_app_rom;
