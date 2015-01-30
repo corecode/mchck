@@ -1,18 +1,24 @@
-static inline int
-bf_mask_to_width(uint32_t mask)
-{
-        int width = 0;
-
-        while (mask) {
-                width++;
-                mask >>= 1;
-        }
-        return (width);
-}
+#define bf_mask_to_width(mask)                                  \
+        ((mask) == 0b1 ? 1 :                                    \
+                (mask) == 0b11 ? 2 :                            \
+                (mask) == 0b111 ? 3 :                           \
+                (mask) == 0b1111 ? 4 :                          \
+                (mask) == 0b11111 ? 5 :                         \
+                (mask) == 0b111111 ? 6 :                        \
+                (mask) == 0b1111111 ? 7 :                       \
+                (mask) == 0b11111111 ? 8 :                      \
+                (mask) == 0b111111111 ? 9 :                     \
+                (mask) == 0b1111111111 ? 10 :                   \
+                (mask) == 0b11111111111 ? 11 :                  \
+                (mask) == 0b111111111111 ? 12 :                 \
+                (mask) == 0b1111111111111 ? 13 :                \
+                (mask) == 0b11111111111111 ? 14 :               \
+                (mask) == 0b111111111111111 ? 15 :              \
+                (mask) == 0b1111111111111111 ? 16 : 0xffffffff)
 
 #define bf_set(loc, name, val)                                          \
         do {                                                            \
-        	uint32_t _bitpos = name ## _SHIFT;                      \
+                uint32_t _bitpos = name ## _SHIFT;                      \
                 uint32_t _bitmask = name ## _MASK;                      \
                                                                         \
                 if (__builtin_constant_p(val) &&                        \
@@ -56,7 +62,7 @@ bf_set1(uint32_t locval, int bitpos, uint32_t bitmask, uint32_t val)
 
 #define bf_get(loc, name)                                               \
         ({                                                              \
-        	uint32_t _bitpos = name ## _SHIFT;                      \
+                uint32_t _bitpos = name ## _SHIFT;                      \
                 uint32_t _bitmask = name ## _MASK;                      \
                 uint32_t _res;                                          \
                                                                         \
