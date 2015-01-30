@@ -26,15 +26,15 @@
 #define bme_bf_set(loc, bitpos, width, val)                             \
         do {                                                            \
                 uintptr_t _addr = (uintptr_t)&(loc);                    \
-                _addr |= (1 << 28) | ((bitpos) << 23) | ((width) << 19); \
+                _addr |= (1 << 28) | ((bitpos) << 23) | (((width) - 1) << 19); \
                 volatile typeof((loc)) *locp = (void *)_addr;           \
-                *locp = (val);                                          \
+                *locp = (val) << bitpos;                                \
         } while (0)
 
 #define bme_bf_get(loc, bitpos, width)                                  \
         ({                                                              \
                 uintptr_t _addr = (uintptr_t)&(loc);                    \
-                _addr |= (1 << 28) | ((bitpos) << 23) | ((width) << 19); \
+                _addr |= (1 << 28) | ((bitpos) << 23) | (((width) - 1) << 19); \
                 volatile typeof((loc)) *locp = (void *)_addr;           \
                 *locp;                                                  \
         })
