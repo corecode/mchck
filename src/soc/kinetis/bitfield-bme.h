@@ -3,7 +3,6 @@ bf_mask_to_width(uint32_t mask)
 {
         int width = 0;
 
-        mask += 1;
         while (mask) {
                 width++;
                 mask >>= 1;
