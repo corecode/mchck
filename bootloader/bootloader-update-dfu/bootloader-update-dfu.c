@@ -43,7 +43,7 @@ onboard_led_morse_raw(const char *signs)
 /**
  * We buffer the whole bootloader here before we go on to flash it.
  */
-static char staging[FLASH_SECTOR_SIZE * 3];
+static uint8_t staging[FLASH_SECTOR_SIZE * 3];
 
 static enum dfu_status
 setup_write(size_t off, size_t len, void **buf)

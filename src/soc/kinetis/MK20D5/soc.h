@@ -18,6 +18,9 @@
 #include <soc/kinetis/periph/ftfl.h>
 #include <soc/kinetis/periph/usbotg.h>
 #include <soc/kinetis/periph/sim.h>
+#include <soc/kinetis/periph/spi.h>
+#include <soc/kinetis/periph/ftm.h>
+#include <soc/kinetis/periph/adc.h>
 
 #include <soc/kinetis/adc.h>
 #include <soc/kinetis/crc.h>

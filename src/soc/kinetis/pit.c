@@ -7,9 +7,9 @@ static struct pit_ctx_t {
 void
 pit_init(void)
 {
-	SIM.scgc6.pit = 1;
-	PIT.mcr.mdis = 0;
-	PIT.mcr.frz = 0;
+	bf_set(SIM_SCGC6, SIM_SCGC6_PIT, 1);
+	bf_set(PIT_MCR, PIT_MCR_MDIS, 0);
+	bf_set(PIT_MCR, PIT_MCR_FRZ, 0);
 	int_enable(IRQ_PIT0);
 	int_enable(IRQ_PIT1);
 	int_enable(IRQ_PIT2);
@@ -20,29 +20,28 @@ void
 pit_start(enum pit_id id, uint32_t cycles, pit_callback *cb)
 {
 	ctx[id].cb = cb;
-	volatile struct PIT_TIMER_t *timer = &PIT.timer[id];
-	timer->ldval = cycles;
-	timer->tflg.tif = 1;
-	timer->tctrl.tie = cb != NULL;
-	timer->tctrl.ten = 1;
+	PIT_LDVAL(id) = cycles;
+	bf_set(PIT_TFLG(id), PIT_TFLG_TIF, 1);
+	bf_set(PIT_TCTRL(id), PIT_TCTRL_TIE, cb != NULL);
+	bf_set(PIT_TCTRL(id), PIT_TCTRL_TEN, 1);
 }
 
 void
 pit_stop(enum pit_id id)
 {
-	PIT.timer[id].tctrl.ten = 0;
+	bf_set(PIT_TCTRL(id), PIT_TCTRL_TEN, 0);
 }
 
 uint32_t
 pit_cycle(enum pit_id id)
 {
-	return PIT.timer[id].cval;
+	return PIT_CVAL(id);
 }
 
 static void
 common_handler(enum pit_id id)
 {
-	PIT.timer[id].tflg.tif = 1;
+	bf_set(PIT_TFLG(id), PIT_TFLG_TIF, 1);
 	ctx[id].cb(id);
 }
 

@@ -1,15 +1,15 @@
 #include <mchck.h>
 
 void
-pin_change_handler(volatile struct PORT_t *port,
+pin_change_handler(PORT_MemMapPtr port,
                    const struct pin_change_handler *handlers,
                    const struct pin_change_handler *end)
 {
         const struct pin_change_handler *i;
         for (i = handlers; i < end; i++) {
                 uint32_t bit = 1 << pin_physpin_from_pin(i->pin_id);
-                if (port->isfr & bit) {
-                        port->isfr = bit;
+                if (PORT_ISFR_REG(port) & bit) {
+                        PORT_ISFR_REG(port) = bit;
                         i->cb(i->cbdata);
                 }
         }
@@ -21,7 +21,7 @@ pin_change_handler(volatile struct PORT_t *port,
         void \
         PORT##port##_Handler(void) \
         { \
-                pin_change_handler(&PORT##port, &pin_hooks_##port, \
+                pin_change_handler(PORT##port##_BASE_PTR, &pin_hooks_##port, \
                                    &pin_hooks_##port##_end);       \
         }
 
@@ -33,9 +33,9 @@ PORT_CHANGE_HANDLER(D);
 #define pin_change_init_port(port, scgc_shift)                          \
         for (const struct pin_change_handler *i = &pin_hooks_##port;    \
              i < &pin_hooks_##port##_end; i++) {                        \
-                SIM.scgc5.raw |= 1 << scgc_shift;                       \
-                volatile struct PORT_t *p = &PORT##port;                \
-                p->pcr[pin_physpin_from_pin(i->pin_id)].irqc = i->polarity; \
+                SIM_SCGC5 |= 1 << scgc_shift;                       \
+                PORT_MemMapPtr p = PORT##port##_BASE_PTR;                \
+                bf_set(PORT_PCR_REG(p, pin_physpin_from_pin(i->pin_id)), PORT_PCR_IRQC, i->polarity); \
                 int_enable(IRQ_PORT##port);                             \
         }
 
