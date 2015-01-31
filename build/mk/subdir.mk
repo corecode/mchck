@@ -1,0 +1,6 @@
+all: ${SUBDIRS}
+
+${SUBDIRS}:
+	@${MAKE} -C "$@" ${MAKEFLAGS} ${MAKECMDGOALS}
+
+.PHONY: ${SUBDIRS}
