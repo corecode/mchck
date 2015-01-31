@@ -1,12 +1,8 @@
-.DEFAULT: subdirs
-
 subdirs: ${SUBDIRS}
 
-define mksubdir
-$1:
-	@$${MAKE} -C "$$@" $${MAKECMDGOALS}
-endef
+%:: subdirs ;
 
-$(foreach d,${SUBDIRS},$(eval $(call mksubdir,$d)))
+${SUBDIRS}:
+	@${MAKE} -C "$@" ${MAKECMDGOALS}
 
 .PHONY: ${SUBDIRS}
