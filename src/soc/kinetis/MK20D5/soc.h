@@ -4,10 +4,13 @@
 #define SIM_SCGC5_LPTMR_SHIFT SIM_SCGC5_LPTIMER_SHIFT
 #define SIM_SCGC5_LPTMR_MASK SIM_SCGC5_LPTIMER_MASK
 
+#define FlashConfig_BASE_PTR FTFL_FlashConfig_BASE_PTR
 
 #define FLASH_SECTOR_SIZE 1024
 #define FLASH_SECTION_SIZE 1024
 #define FLASH_ELEM_SIZE 4
+
+#define HAVE_PIT_SEPARATE_IRQ
 
 #include <soc/cortex-m/soc.h>
 #include <soc/cortex-m/bitband.h>

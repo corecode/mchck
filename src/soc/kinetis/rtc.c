@@ -43,9 +43,9 @@ rtc_alarm_update(void)
 
         if (alarm_head) {
                 RTC_TAR = alarm_head->time;
-                int_enable(IRQ_RTC_alarm);
+                int_enable(IRQ_RTC);
         } else {
-                int_disable(IRQ_RTC_alarm);
+                int_disable(IRQ_RTC);
         }
 }
 

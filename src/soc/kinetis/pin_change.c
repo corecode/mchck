@@ -30,11 +30,11 @@ PORT_CHANGE_HANDLER(B);
 PORT_CHANGE_HANDLER(C);
 PORT_CHANGE_HANDLER(D);
 
-#define pin_change_init_port(port, scgc_shift)                          \
+#define pin_change_init_port(port)                                      \
         for (const struct pin_change_handler *i = &pin_hooks_##port;    \
              i < &pin_hooks_##port##_end; i++) {                        \
-                SIM_SCGC5 |= 1 << scgc_shift;                       \
-                PORT_MemMapPtr p = PORT##port##_BASE_PTR;                \
+                bf_set(SIM_SCGC5, SIM_SCGC5_PORT##port, 1);             \
+                PORT_MemMapPtr p = PORT##port##_BASE_PTR;               \
                 bf_set(PORT_PCR_REG(p, pin_physpin_from_pin(i->pin_id)), PORT_PCR_IRQC, i->polarity); \
                 int_enable(IRQ_PORT##port);                             \
         }
@@ -42,8 +42,8 @@ PORT_CHANGE_HANDLER(D);
 void
 pin_change_init(void)
 {
-        pin_change_init_port(A, 9);
-        pin_change_init_port(B, 10);
-        pin_change_init_port(C, 11);
-        pin_change_init_port(D, 12);
+        pin_change_init_port(A);
+        pin_change_init_port(B);
+        pin_change_init_port(C);
+        pin_change_init_port(D);
 }

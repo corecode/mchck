@@ -10,10 +10,15 @@ pit_init(void)
 	bf_set(SIM_SCGC6, SIM_SCGC6_PIT, 1);
 	bf_set(PIT_MCR, PIT_MCR_MDIS, 0);
 	bf_set(PIT_MCR, PIT_MCR_FRZ, 0);
+
+#if defined(HAVE_PIT_SEPARATE_IRQ)
 	int_enable(IRQ_PIT0);
 	int_enable(IRQ_PIT1);
 	int_enable(IRQ_PIT2);
 	int_enable(IRQ_PIT3);
+#else
+	int_enable(IRQ_PIT);
+#endif
 }
 
 void
@@ -45,6 +50,9 @@ common_handler(enum pit_id id)
 	ctx[id].cb(id);
 }
 
+
+#if defined(HAVE_PIT_SEPARATE_IRQ)
+
 void
 PIT0_Handler(void)
 {
@@ -68,3 +76,16 @@ PIT3_Handler(void)
 {
 	common_handler(PIT_3);
 }
+
+#else
+
+void
+PIT_Handler(void)
+{
+	if (bf_get(PIT_TFLG(0), PIT_TFLG_TIF))
+		common_handler(PIT_0);
+	if (bf_get(PIT_TFLG(1), PIT_TFLG_TIF))
+		common_handler(PIT_1);
+}
+
+#endif
