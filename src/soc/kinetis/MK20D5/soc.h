@@ -5,6 +5,7 @@
 #define SIM_SCGC5_LPTMR_MASK SIM_SCGC5_LPTIMER_MASK
 
 #define FlashConfig_BASE_PTR FTFL_FlashConfig_BASE_PTR
+#define FlexRAM_BASE_PTR ((void *)0x14000000)
 
 #define FLASH_SECTOR_SIZE 1024
 #define FLASH_SECTION_SIZE 1024
@@ -19,6 +20,7 @@
 
 #include <soc/kinetis/periph/lptmr.h>
 #include <soc/kinetis/periph/ftfl.h>
+#include <soc/kinetis/periph/flashconfig.h>
 #include <soc/kinetis/periph/usbotg.h>
 #include <soc/kinetis/periph/sim.h>
 #include <soc/kinetis/periph/dspi.h>
