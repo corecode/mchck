@@ -3,8 +3,9 @@
         	uint32_t _bitpos = name ## _SHIFT;                      \
                 uint32_t _bitmask = name ## _MASK;                      \
                 if (__builtin_constant_p(&loc) &&                       \
+                    bitband_addr_valid_p((uintptr_t)&loc) &&            \
                     (1 << _bitpos) == _bitmask) {                       \
-                        bitband_set((uintptr_t)&loc, _bitpos, val);     \
+                        bitband_set(loc, _bitpos, val);                 \
                 } else {                                                \
                         typeof(&loc) locp = &loc;                       \
                         uint32_t _locval = *locp;                       \
@@ -41,8 +42,9 @@ bf_set1(uint32_t locval, int bitpos, uint32_t bitmask, uint32_t val)
                 uint32_t _res;                                          \
                                                                         \
                 if (__builtin_constant_p(&loc) &&                       \
+                    bitband_addr_valid_p((uintptr_t)&loc) &&            \
                     (1 << _bitpos) == _bitmask) {                       \
-                        _res = bitband_get((uintptr_t)&loc, _bitpos);   \
+                        _res = bitband_get(loc, _bitpos);               \
                 } else {                                                \
                         _res = (((loc) & (name ## _MASK)) >> (name ## _SHIFT)); \
                 }                                                       \
